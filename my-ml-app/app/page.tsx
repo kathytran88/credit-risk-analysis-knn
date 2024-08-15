@@ -24,23 +24,29 @@ export default function Home() {
     };
 
     const handleSubmit = async (e: React.FormEvent, model: string) => {
-        e.preventDefault();
-        try {
-            const res = await fetch(`/api/predict/${model}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ features })
-            });
-            if (!res.ok) {
-                throw new Error('Network response was not ok');
-            }
-            const data = await res.json();
-            setResults({ ...results, [model]: data.prediction });
-        } catch (error) {
-            console.error('Error:', error);
-            setResults({ ...results, [model]: 'Error occurred' });
-        }
-    };
+      e.preventDefault();
+      try {
+          console.log('Submitting data:', { features });
+          const res = await fetch(`http://localhost:5000/api/predict/${model}`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ features })
+          });
+  
+          console.log('Response status:', res.status);
+          if (!res.ok) {
+              throw new Error('Network response was not ok');
+          }
+  
+          const data = await res.json();
+          console.log('API response data:', data);
+          setResults({ ...results, [model]: data.prediction });
+      } catch (error) {
+          console.error('Error:', error);
+          setResults({ ...results, [model]: 'Error occurred' });
+      }
+  };
+  
 
     return (
         <div className="container">
