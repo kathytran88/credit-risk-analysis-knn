@@ -13,8 +13,11 @@ def predict(model):
     try:
         data = request.json
         features = data.get('features')
-        
-        # Ensure features are in the expected format
+        print("Received features:", features)  # Log the received data
+
+        if not features:
+            return jsonify({'prediction': 'Error: No features provided'})
+
         if model == 'knn':
             prediction = knn_model.predict([features])
         elif model == 'dt':
@@ -24,9 +27,12 @@ def predict(model):
         else:
             return jsonify({'prediction': 'Error: Model not found'})
 
+        print("Prediction result:", prediction[0])  # Log the prediction result
         return jsonify({'prediction': prediction[0]})
     except Exception as e:
+        print("Error occurred:", str(e))  # Log the error
         return jsonify({'prediction': 'Error occurred', 'details': str(e)})
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)

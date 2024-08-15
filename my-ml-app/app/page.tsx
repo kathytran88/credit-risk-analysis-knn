@@ -24,28 +24,28 @@ export default function Home() {
     };
 
     const handleSubmit = async (e: React.FormEvent, model: string) => {
-      e.preventDefault();
-      try {
-          console.log('Submitting data:', { features });
-          const res = await fetch(`http://localhost:5000/api/predict/${model}`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ features })
-          });
-  
-          console.log('Response status:', res.status);
-          if (!res.ok) {
-              throw new Error('Network response was not ok');
-          }
-  
-          const data = await res.json();
-          console.log('API response data:', data);
-          setResults({ ...results, [model]: data.prediction });
-      } catch (error) {
-          console.error('Error:', error);
-          setResults({ ...results, [model]: 'Error occurred' });
-      }
-  };
+        e.preventDefault();
+        try {
+            console.log('Submitting data:', { features });
+            const res = await fetch(`http://localhost:5000/api/predict/${model}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ features })
+            });
+     
+            console.log('Response status:', res.status);
+            if (!res.ok) {
+                throw new Error('Network response was not ok');
+            }
+     
+            const data = await res.json();
+            console.log('API response data:', data);
+            setResults({ ...results, [model]: data.prediction });
+        } catch (error) {
+            console.error('Error:', error);
+            setResults({ ...results, [model]: 'Error occurred' });
+        }
+     };     
   
 
     return (
@@ -112,26 +112,27 @@ export default function Home() {
                 <button type="submit">Predict Random Forest</button>
             </form>
 
-            <div>
-                {results.knn && (
-                    <div>
-                        <h3>KNN Prediction</h3>
-                        <p>Result: {results.knn}</p>
-                    </div>
-                )}
-                {results.dt && (
-                    <div>
-                        <h3>Decision Tree Prediction</h3>
-                        <p>Result: {results.dt}</p>
-                    </div>
-                )}
-                {results.rf && (
-                    <div>
-                        <h3>Random Forest Prediction</h3>
-                        <p>Result: {results.rf}</p>
-                    </div>
-                )}
-            </div>
+<div>
+    {results.knn && (
+        <div>
+            <h3>KNN Prediction</h3>
+            <p>Result: {results.knn === 0 ? 'No Risk' : 'Risk'}</p>
+        </div>
+    )}
+    {results.dt && (
+        <div>
+            <h3>Decision Tree Prediction</h3>
+            <p>Result: {results.dt === 0 ? 'No Risk' : 'Risk'}</p>
+        </div>
+    )}
+    {results.rf && (
+        <div>
+            <h3>Random Forest Prediction</h3>
+            <p>Result: {results.rf === 0 ? 'No Risk' : 'Risk'}</p>
+        </div>
+    )}
+</div>
+
         </div>
     );
 }
